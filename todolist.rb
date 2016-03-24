@@ -14,6 +14,7 @@ class TodoList
       raise TypeError, 'can only add Todo objects'
     end
   end
+  alias_method :<<, :add
 
   def size
     todos.size
@@ -47,13 +48,22 @@ class TodoList
     todos.pop
   end
 
+  def done?
+    @todos.all?(&:done?)
+  end
+
   def remove_at(index)
     todos.delete_at(index)
   end
 
   def to_s
-    puts "---- #{title} ----"
-    todos.each { |todo| puts todo }
+    text = "---- #{title} ----\n"
+    text << @todos.map(&:to_s).join("\n")
+    text
+  end
+
+  def to_a
+    todos
   end
 
   def each
@@ -90,11 +100,11 @@ class TodoList
     find_by_title && find_by_title(search).done!
   end
 
-  def mark_all_done
+  def done!
     each(&:done!)
   end
 
-  def mark_all_undone
+  def undone!
     each(&:undone!)
   end
 end
@@ -194,6 +204,6 @@ end
 # # ---- Outputting the list -----
 
 # # to_s
-# # list.to_s
+# print list.to_s
 
 
